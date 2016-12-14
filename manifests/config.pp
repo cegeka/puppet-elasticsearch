@@ -128,7 +128,7 @@ class elasticsearch::config {
 
     # Other OS than Linux may not have that sysctl
     if $::kernel == 'Linux' {
-      sysctl { 'vm.max_map_count':
+      sysctl::conf { 'vm.max_map_count':
         value => 262144,
       }
     }
