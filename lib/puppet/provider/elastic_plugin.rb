@@ -1,5 +1,10 @@
 require 'uri'
-require 'puppet_x/elastic/plugin_name'
+begin
+  require 'puppet_x/elastic/plugin_name'
+rescue LoadError
+  require 'pathname' # WORK_AROUND #14073 and #7788
+  require File.join(File.dirname(__FILE__), '../../puppet_x/elastic/plugin_name')
+end
 
 class Puppet::Provider::ElasticPlugin < Puppet::Provider
 

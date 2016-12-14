@@ -4,7 +4,12 @@ require 'json'
 require 'net/http'
 require 'openssl'
 
-require 'puppet_x/elastic/deep_to_i'
+begin
+  require 'puppet_x/elastic/deep_to_i'
+rescue LoadError
+  require 'pathname' # WORK_AROUND #14073 and #7788
+  require File.join(File.dirname(__FILE__), '../../../puppet_x/elastic/deep_to_i')
+end
 
 Puppet::Type.type(:elasticsearch_template).provide(:ruby) do
   desc <<-ENDHEREDOC

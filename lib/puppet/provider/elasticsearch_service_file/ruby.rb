@@ -3,7 +3,12 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..","..",".."))
 require 'pathname'
 require 'puppet/util/filetype'
 
-require 'puppet_x/elastic/es_versioning'
+begin
+  require 'puppet_x/elastic/es_versioning'
+rescue LoadError
+  require 'pathname' # WORK_AROUND #14073 and #7788
+  require File.join(File.dirname(__FILE__), '../../../puppet_x/elastic/es_versioning')
+end
 
 Puppet::Type.type(:elasticsearch_service_file).provide(:ruby) do
   desc <<-ENDHEREDOC

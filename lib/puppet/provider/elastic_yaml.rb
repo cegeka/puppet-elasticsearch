@@ -1,7 +1,12 @@
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 require 'puppet/provider/parsedfile'
 require 'puppet/util/package'
-require 'puppet_x/elastic/hash'
+begin
+  require 'puppet_x/elastic/hash'
+rescue LoadError
+  require 'pathname' # WORK_AROUND #14073 and #7788
+  require File.join(File.dirname(__FILE__), '../../puppet_x/elastic/hash')
+end
 
 class Puppet::Provider::ElasticYaml < Puppet::Provider::ParsedFile
 

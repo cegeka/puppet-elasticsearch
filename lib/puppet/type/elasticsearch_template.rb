@@ -4,8 +4,14 @@ require 'puppet/file_serving/content'
 require 'puppet/file_serving/metadata'
 require 'puppet/parameter/boolean'
 
-require 'puppet_x/elastic/deep_implode'
-require 'puppet_x/elastic/deep_to_i'
+begin
+  require 'puppet_x/elastic/deep_implode'
+  require 'puppet_x/elastic/deep_to_i'
+rescue LoadError
+  require 'pathname' # WORK_AROUND #14073 and #7788
+  require File.join(File.dirname(__FILE__), '../../puppet_x/elastic/deep_implode')
+  require File.join(File.dirname(__FILE__), '../../puppet_x/elastic/deep_to_i')
+end
 
 Puppet::Type.newtype(:elasticsearch_template) do
   desc 'Manages Elasticsearch index templates.'

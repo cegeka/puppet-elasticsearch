@@ -1,6 +1,11 @@
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 
-require 'puppet_x/elastic/deep_implode'
+begin
+  require 'puppet_x/elastic/deep_implode'
+rescue LoadError
+  require 'pathname' # WORK_AROUND #14073 and #7788
+  require File.join(File.dirname(__FILE__), '../../../puppet_x/elastic/deep_implode')
+end
 
 module Puppet::Parser::Functions
   newfunction(
