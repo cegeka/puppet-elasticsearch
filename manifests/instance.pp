@@ -394,8 +394,10 @@ define elasticsearch::instance(
     }
 
     file { "${instance_configdir}/scripts":
-      ensure => 'link',
-      target => "${elasticsearch::params::homedir}/scripts",
+      ensure => 'directory',
+      owner   => $elasticsearch::elasticsearch_user,
+      group   => undef,
+      mode    => '0644',
       before => Elasticsearch::Service[$name];
     }
 
