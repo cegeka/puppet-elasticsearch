@@ -2,13 +2,14 @@ Puppet::Type.newtype(:elasticsearch_plugin) do
 
   @doc = "Plugin installation type"
 
-  ensurable do
-    defaultvalues
-    defaultto :present
-  end
+  ensurable
 
   newparam(:name, :namevar => true) do
     desc 'An arbitrary name used as the identity of the resource.'
+  end
+
+  newparam(:elasticsearch_package_name) do
+    desc 'Name of the system Elasticsearch package.'
   end
 
   newparam(:url) do

@@ -1,4 +1,4 @@
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..",".."))
 
 require 'puppet/util/checksums'
 
@@ -29,6 +29,9 @@ Puppet::Type.newtype(:elasticsearch_service_file) do
       opt_flag, opt_flags = Puppet_X::Elastic::EsVersioning.opt_flags(
         resource[:package_name], resource.catalog
       )
+      # This should only be present on systemd systems.
+      opt_flags.delete('--quiet') unless resource[:name].include?('systemd')
+
       template = ERB.new(should, 0, "-")
       is == template.result(binding)
     end
@@ -55,6 +58,10 @@ Puppet::Type.newtype(:elasticsearch_service_file) do
     desc 'Group to run service under.'
   end
 
+  newparam(:homedir) do
+    desc 'Elasticsearch home directory.'
+  end
+
   newparam(:instance) do
     desc 'Elasticsearch instance name.'
   end
@@ -65,6 +72,10 @@ Puppet::Type.newtype(:elasticsearch_service_file) do
 
   newparam(:nofile) do
     desc 'Service NOFILE ulimit.'
+  end
+
+  newparam(:nproc) do
+    desc 'Service NPROC ulimit.'
   end
 
   newparam(:package_name) do

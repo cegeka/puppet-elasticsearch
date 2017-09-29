@@ -1,11 +1,6 @@
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 
-begin
-  require 'puppet_x/elastic/plugin_name'
-rescue LoadError
-  require 'pathname' # WORK_AROUND #14073 and #7788
-  require File.join(File.dirname(__FILE__), '../../../puppet_x/elastic/plugin_name')
-end
+require 'puppet_x/elastic/plugin_parsing'
 
 module Puppet::Parser::Functions
   newfunction(
@@ -23,6 +18,8 @@ module Puppet::Parser::Functions
         es_plugin_name('foo/plug/1.0.0')
         es_plugin_name('foo/elasticsearch-plug')
         es_plugin_name('foo/es-plug/1.3.2')
+
+    @return String
     ENDHEREDOC
 
     if args.length < 1

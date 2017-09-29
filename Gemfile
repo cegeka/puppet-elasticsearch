@@ -1,15 +1,22 @@
 source 'https://rubygems.org'
 
-puppetversion = ENV['PUPPET_VERSION'] || '~> 3.8.0'
+puppetversion = ENV['PUPPET_VERSION'] || '~> 4.9'
 gem 'puppet', puppetversion, :require => false
 
-gem 'beaker', '~> 2.51'
-gem 'beaker-pe', '~> 0.12'
-gem 'beaker-rspec', '~> 5.0'
+install_if(Gem::Version.new(puppetversion.split(' ').last) < Gem::Version.new(4)) do
+  gem 'semantic_puppet'
+end
+
+gem 'beaker', '~> 3.7'
+gem 'beaker-rspec', '~> 6.0'
+# 0.7.0 breaks 3.8, see https://github.com/puppetlabs/beaker-puppet_install_helper/issues/27
+gem 'beaker-puppet_install_helper', '0.6.0'
 gem 'metadata-json-lint'
-gem 'rspec-puppet', '~> 2.4'
+gem 'rspec-puppet'
 gem 'specinfra', '~> 2.60'
 gem 'infrataster'
+gem 'puppet-blacksmith'
+gem 'xmlrpc'
 
 gem 'pry'
 gem 'docker-api', '~> 1.0'
@@ -17,17 +24,20 @@ gem 'rubysl-securerandom'
 gem 'ci_reporter_rspec'
 gem 'rspec', '~> 3.0'
 gem 'rake'
-gem 'puppet-doc-lint'
 gem 'puppet-lint'
 gem 'puppetlabs_spec_helper'
+gem 'puppet-strings'
 gem 'puppet-syntax'
 gem 'rspec-puppet-facts'
+# This is required until https://github.com/camptocamp/facterdb/pull/44 is released
+gem 'facter', '~> 2.4.0'
 gem 'rspec-puppet-utils'
 gem 'rspec-retry'
+gem 'rubocop'
 gem 'webmock'
 
 # Extra Puppet-lint gems
-gem 'puppet-lint-appends-check', :require => false
+gem 'puppet-lint-appends-check', :git => 'https://github.com/voxpupuli/puppet-lint-appends-check', :ref => '07be8ce22d69353db055820b60bb77fe020238a6', :require => false
 gem 'puppet-lint-version_comparison-check', :require => false
 gem 'puppet-lint-unquoted_string-check', :require => false
 gem 'puppet-lint-undef_in_function-check', :require => false
@@ -35,3 +45,4 @@ gem 'puppet-lint-trailing_comma-check', :require => false
 gem 'puppet-lint-leading_zero-check', :require => false
 gem 'puppet-lint-file_ensure-check', :require => false
 gem 'puppet-lint-empty_string-check', :require => false
+gem 'puppet-lint-param-docs', :require => false
